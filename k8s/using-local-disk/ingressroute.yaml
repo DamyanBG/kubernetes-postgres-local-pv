@@ -8,7 +8,7 @@ spec:
     - match: PathPrefix(`/pg-dev`)
       kind: Rule
       services:
-        - name: stores-service-svc 
+        - name: postgres-svc
           port: 5432
       middlewares:
         - name: pg-dev-stripprefix
