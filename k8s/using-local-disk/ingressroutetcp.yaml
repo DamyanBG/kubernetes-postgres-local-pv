@@ -1,0 +1,13 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: postgres-tcp
+  namespace: pg-dev
+spec:
+  entryPoints:
+    - postgres-tcp       # This entrypoint must be defined in your Traefik configuration
+  routes:
+    - match: HostSNI(`*`) # Matches any hostname; you can specify a specific host if needed
+      services:
+        - name: postgres-svc
+          port: 5432
