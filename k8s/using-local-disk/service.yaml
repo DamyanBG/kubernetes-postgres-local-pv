@@ -7,11 +7,11 @@ metadata:
     app: postgres
     environment: dev
 spec:
+  type: LoadBalancer
   selector:
     app: postgres
   ports:
     - protocol: TCP
-      port: 5432         
-      targetPort: 5432    
+      port: 5432
+      targetPort: 5432
       name: postgres
-  type: ClusterIP 
