@@ -5,9 +5,9 @@ metadata:
   namespace: pg-dev
 spec:
   entryPoints:
-    - postgres-tcp       # This entrypoint must be defined in your Traefik configuration
+    - postgres-tcp    
   routes:
-    - match: HostSNI(`*`) # Matches any hostname; you can specify a specific host if needed
+    - match: HostSNI(`*`) 
       services:
         - name: postgres-svc
           port: 5432
