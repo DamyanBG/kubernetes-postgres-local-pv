@@ -7,9 +7,9 @@ metadata:
   namespace: pg-agents
 spec:
   entryPoints:
-    - postgres-agents-tcp    
+    - postgres-agents-tcp
   routes:
     - match: HostSNI(`*`) 
       services:
-        - name: postgres-svc
+        - name: postgres-agents-svc
           port: 5433
