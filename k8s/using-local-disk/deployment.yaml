@@ -1,8 +1,8 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: postgres-deployment
-  namespace: pg-dev
+  name: postgres-agents-deployment
+  namespace: pg-agents
   labels:
     app: postgres
     environment: dev
@@ -15,12 +15,13 @@ spec:
     metadata:
       labels:
         app: postgres
+        environment: dev
     spec:
       nodeSelector:
         kubernetes.io/hostname: asp-node-01 
       containers:
       - name: postgres
-        image: postgres:17
+        image: postgres:18.1
         ports:
         - containerPort: 5432
           name: postgres
@@ -28,7 +29,7 @@ spec:
         - name: POSTGRES_PASSWORD
           valueFrom:
             secretKeyRef:
-              name: postgres-secret
+              name: postgres-agents-secret
               key: POSTGRES_PASSWORD
         volumeMounts:
         - name: postgres-data
@@ -36,4 +37,4 @@ spec:
       volumes:
       - name: postgres-data
         persistentVolumeClaim:
-          claimName: postgres-pvc
+          claimName: postgres-agents-pvc

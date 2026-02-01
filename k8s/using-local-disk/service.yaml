@@ -1,8 +1,8 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: postgres-svc
-  namespace: pg-dev
+  name: postgres-agentssvc
+  namespace: pg-agents
   labels:
     app: postgres
     environment: dev

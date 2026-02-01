@@ -1,18 +1,20 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: postgresql-dev-pv
-  namespace: pg-dev
+  name: postgresql-agents-pv
+  namespace: pg-agents
+  labels:
+    environment: dev
 spec:
   capacity:
-    storage: 20Gi
+    storage: 50Gi
   volumeMode: Filesystem
   accessModes:
   - ReadWriteOnce
   persistentVolumeReclaimPolicy: Delete
-  storageClassName: db-local-dev
+  storageClassName: db-local-agents
   local:
-    path: /mnt/databases/pg-dev
+    path: /mnt/databases/pg-agents
   nodeAffinity:
     required:
       nodeSelectorTerms:
