@@ -1,14 +1,29 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: pg-dynamic
+  labels:
+    app: postgres
+    project: nfs-test
+spec:
+  ports:
+  - port: 5432
+    name: postgres
+  clusterIP: None
+  selector:
+    app: postgres
+---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: postgres-statefulset
-  namespace: pg-dev
+  name: postgres
+  namespace: pg-dynamic
   labels:
-    app: postgres
-    environment: dev
+    project: nfs-test
 spec:
-  serviceName: postgres
-  replicas: 2
+  serviceName: "postgres"
+  replicas: 3
   selector:
     matchLabels:
       app: postgres
@@ -16,25 +31,32 @@ spec:
     metadata:
       labels:
         app: postgres
+        project: nfs-test
     spec:
       containers:
-        - name: postgres
-          image: postgres:17
-          imagePullPolicy: "Always"
-          ports:
-            - containerPort: 5432
-              name: postgres
-          env:
-          - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: postgres-secret
-                key: POSTGRES_PASSWORD
-          volumeMounts:
-          - name: postgres-data
-            mountPath: /var/lib/postgresql/data
-            subPath: postgres-data
-      volumes:
+      - name: postgres
+        image: postgres:17
+        ports:
+        - containerPort: 5432
+          name: postgres
+        env:
+        - name: POSTGRES_PASSWORD
+          value: testpassword
+        - name: POSTGRES_DB
+          value: testdb
+        - name: POSTGRES_USER
+          value: testuser
+        volumeMounts:
         - name: postgres-data
-          persistentVolumeClaim:
-            claimName: postgres-pvc
+          mountPath: /var/lib/postgresql/data
+  volumeClaimTemplates:
+  - metadata:
+      name: postgres-data
+      labels:
+        project: nfs-test
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: nfs-dynamic-sc
+      resources:
+        requests:
+          storage: 5Gi
